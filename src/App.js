@@ -343,7 +343,7 @@ function App() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ message: message, uid: uid })
+        body: JSON.stringify({ message: message, uid: uid , source: 'ar' })
       });
 
       if (!response.ok) {
