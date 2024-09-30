@@ -12,7 +12,6 @@ import * as speechsdk from 'microsoft-cognitiveservices-speech-sdk';
 
 const speechKey = process.env.REACT_APP_AZURE_SPEECH_API_KEY;
 const serviceRegion = 'eastus';
-const voiceName = 'en-US-AvaNeural';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -28,12 +27,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
-let articles = '';
-let uid = '';
 
 function App() {
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
+  const [voiceName, setVoiceName] = useState('en-US-AriaNeural');
+  const [articles, setArticles] = useState('');
   const [completedTasks, setCompletedTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
   const [editTask, setEditTask] = useState(null);
@@ -62,7 +61,6 @@ function App() {
   useEffect(() => {
     if (user) {
       const todoCollection = collection(db, 'todo')
-      uid = user.uid;
       const urlParams = new URLSearchParams(window.location.search);
       const limitParam = urlParams.get('limit');
       const limitValue = limitParam ? parseInt(limitParam) : 2;
@@ -74,7 +72,7 @@ function App() {
           id: doc.id,
           ...doc.data(),
         }));
-        articles += tasksData.map((task) => task.task).join(' ');
+        setArticles(tasksData.map((task) => task.task).join(' '));
         setLastArticle(snapshot.docs[snapshot.docs.length - 1]); // Set last visible document
         setTasks(tasksData);
       });
@@ -96,7 +94,7 @@ function App() {
           id: doc.id,
           ...doc.data(),
         }));
-        articles += tasksData.map((task) => task.task).join(' ');
+        setArticles(tasksData.map((task) => task.task).join(' '));
         setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
         setCompletedTasks(tasksData);
       });
@@ -343,7 +341,7 @@ function App() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ message: message, uid: uid , source: 'ar' })
+        body: JSON.stringify({ message: message, uid: user.uid , source: 'ar', voice_name: voiceName})
       });
 
       if (!response.ok) {
@@ -354,7 +352,7 @@ function App() {
       alert([`Error: ${error.message}`]);
     } finally {
       // Fetch the Firebase document data
-      const genaiCollection = collection(db, 'genai', uid, 'MyGenAI');
+      const genaiCollection = collection(db, 'genai', user.uid, 'MyGenAI');
       let q = query(genaiCollection, orderBy('createdDateTime', 'desc'), limit(1));
       const genaiSnapshot = await getDocs(q);
       const genaiList = genaiSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -469,6 +467,13 @@ function App() {
                 <button className="button" onClick={fetchMoreArticles}>Show More</button>
               </div>
             )}
+                    <input
+          type="text"
+          placeholder="Enter Voice Name"
+          value={voiceName}
+          onChange={(e) => setVoiceName(e.target.value)}
+          style={{ marginBottom: '10px', fontSize: '18px' }}
+        />
             {showCompleted && (
               <div>
                 <h2>Completed Tasks</h2>
