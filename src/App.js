@@ -122,7 +122,8 @@ function App() {
 
   const synthesizeSpeech = async () => {
     if (isiPhone) {
-      callTTSAPI(articles, 'https://tts.happyrock-2dd71657.centralus.azurecontainerapps.io/');
+      //callTTSAPI(articles, 'https://tts.happyrock-2dd71657.centralus.azurecontainerapps.io/');
+      callTTSAPI(articles, 'https://fastapi-tts-v21-892085575649.us-central1.run.app');     
       return;
     }
     const speechConfig = speechsdk.SpeechConfig.fromSubscription(speechKey, serviceRegion);
