@@ -117,7 +117,7 @@ function TTSQueueApp() {
         //   setReaderMode(true);
         //log the exact date and time
         if (articles.length > 2) {
-          /* const chunks = [];rl
+          /* const chunks = [];
            for (let i = 0; i < promptInput.length; i += 3999) {
              chunks.push(promptInput.substring(i, i + 3999));
            }
@@ -436,7 +436,7 @@ function TTSQueueApp() {
 
                                 <form onSubmit={handleAddTask}>
                                     <input
-                                        className="addTask"
+                                        className="tts-addTask"
                                         type="text"
                                         placeholder=""
                                         value={newTask}
