@@ -117,14 +117,14 @@ function TTSQueueApp() {
         //   setReaderMode(true);
         //log the exact date and time
         if (articles.length > 2) {
-          /* const chunks = [];
+          /* const chunks = [];rl
            for (let i = 0; i < promptInput.length; i += 3999) {
              chunks.push(promptInput.substring(i, i + 3999));
            }
            for (const chunk of chunks) {
              callTTSAPI(chunk);
            }*/
-          callTTSAPI(articles, process.env.REACT_APP_API_URL);
+          callTTSAPI(articles, process.env.REACT_APP_TTS_API_URL);
         }
         else {
           callTTSAPI(articles, 'https://us-central1-reviewtext-ad5c6.cloudfunctions.net/function-18');
