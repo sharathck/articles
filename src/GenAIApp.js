@@ -1,6 +1,6 @@
 import React from 'react';
 
-function App() {
+function GenAIApp() {
   return (
     <div>
       <h1>Invlid Gen AI URL</h1>
@@ -8,4 +8,4 @@ function App() {
   );
 }
 
-export default App;
+export default GenAIApp;
